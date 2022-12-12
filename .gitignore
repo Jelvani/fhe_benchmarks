@@ -40,7 +40,9 @@
 *.x86_64
 *.hex
 src/seal/build/*
+src/openfhe/build/*
 !src/seal/build/.gitkeep
+!src/seal/openfhe/.gitkeep
 
 # Debug files
 *.dSYM/
