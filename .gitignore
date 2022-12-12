@@ -39,8 +39,8 @@
 *.i*86
 *.x86_64
 *.hex
-bin/*
-!bin/.gitkeep
+src/seal/build/*
+!src/seal/build/.gitkeep
 
 # Debug files
 *.dSYM/
