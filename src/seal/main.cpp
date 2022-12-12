@@ -4,10 +4,12 @@ using namespace std::chrono;
 
 #define ITER 100
 #define POLY_MOD_DEGREE 8192
-double get_rand()
+
+int get_rand()
 {
-    return (10000 - 0) * ( (double)rand() / (double)RAND_MAX ) + 0;
+    return (10000) * ( (int)rand() / (int)RAND_MAX ) + 1;
 }
+
 int main()
 {
 
@@ -16,9 +18,9 @@ int main()
 
     for(int i  =0; i < ITER; i++)
     {
-        double a = get_rand();
-        double b = get_rand();
-        double ans = c.multiply_cipher(a,b);
+        int a = get_rand();
+        int b = get_rand();
+        int ans = c.multiply_cipher(a,b);
     }
 
     auto stop = high_resolution_clock::now();
@@ -29,9 +31,9 @@ int main()
     start = high_resolution_clock::now();
     for(int i  =0; i < ITER; i++)
     {
-        double a = get_rand();
-        double b = get_rand();
-        double ans = c.add_cipher(a,b);
+        int a = get_rand();
+        int b = get_rand();
+        int ans = c.add_cipher(a,b);
     }
 
     stop = high_resolution_clock::now();
@@ -41,9 +43,9 @@ int main()
     start = high_resolution_clock::now();
     for(int i  =0; i < ITER; i++)
     {
-        double a = get_rand();
-        double b = get_rand();
-        double ans = c.multiply(a,b);
+        int a = get_rand();
+        int b = get_rand();
+        int ans = c.multiply(a,b);
     }
 
     stop = high_resolution_clock::now();
@@ -53,9 +55,9 @@ int main()
     start = high_resolution_clock::now();
     for(int i  =0; i < ITER; i++)
     {
-        double a = get_rand();
-        double b = get_rand();
-        double ans = c.add(a,b);
+        int a = get_rand();
+        int b = get_rand();
+        int ans = c.add(a,b);
     }
 
     stop = high_resolution_clock::now();
