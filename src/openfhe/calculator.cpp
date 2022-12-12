@@ -5,6 +5,8 @@
 using namespace std::chrono;
 
 #define ITER 200
+#define DEPTH 2
+#define PMD 65537
 using namespace lbcrypto;
 using namespace std;
 
@@ -16,12 +18,12 @@ class Calculator
         CryptoContext<DCRTPoly> context;
         KeyPair<DCRTPoly> keyPair;
 
-        Calculator(size_t pmd)
+        Calculator(size_t pmd, int depth)
         {
             this->parms = new CCParams<CryptoContextBFVRNS>();
             this->pmd = pmd;
             this->parms->SetPlaintextModulus(this->pmd);
-            this->parms->SetMultiplicativeDepth(1);
+            this->parms->SetMultiplicativeDepth(depth);
             this->context = GenCryptoContext(*(this->parms));
             this->context->Enable(PKE);
             this->context->Enable(KEYSWITCH);
@@ -152,7 +154,7 @@ int get_rand()
 }
 
 int main(){
-    Calculator c(65537);
+    Calculator c(PMD,DEPTH);
     auto start = high_resolution_clock::now();
 
     for(int i  =0; i < ITER; i++)
