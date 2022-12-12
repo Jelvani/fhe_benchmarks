@@ -42,7 +42,7 @@
 src/seal/build/*
 src/openfhe/build/*
 !src/seal/build/.gitkeep
-!src/seal/openfhe/.gitkeep
+!src/openfhe/.gitkeep
 
 # Debug files
 *.dSYM/
