@@ -18,6 +18,7 @@ cmake_minimum_required (VERSION 3.5.1)
 
 project(demo CXX)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS -gdwarf-3)
 option( BUILD_STATIC "Set to ON to include static versions of the library" OFF)
 
 find_package(OpenFHE)

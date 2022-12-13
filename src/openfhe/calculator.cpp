@@ -4,9 +4,9 @@
 #include <chrono>
 using namespace std::chrono;
 
-#define ITER 200
-#define DEPTH 2
-#define PMD 65537
+#define ITER 100
+#define DEPTH 1
+#define PMD 1032193
 using namespace lbcrypto;
 using namespace std;
 
