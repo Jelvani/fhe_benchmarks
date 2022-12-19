@@ -10,6 +10,7 @@ class Calculator
     public:
         EncryptionParameters* parms = NULL;
         size_t pmd;
+        size_t depth;
         SEALContext* context = NULL;
         KeyGenerator* keygen = NULL;
         SecretKey secret_key;
@@ -22,11 +23,14 @@ class Calculator
         BatchEncoder* encoder = NULL;
         size_t slot_count;
 
-        Calculator(size_t pmd)
+
+        Calculator(size_t pmd, size_t depth)
         {
             this->parms = new EncryptionParameters(scheme_type::bfv);
             this->pmd = pmd;
+            this->depth = depth;
             this->parms->set_poly_modulus_degree(pmd);
+            //cout << PlainModulus::Batching(pmd, 20).value() << endl;
             this->parms->set_coeff_modulus(CoeffModulus::BFVDefault(pmd));
             this->parms->set_plain_modulus(PlainModulus::Batching(pmd, 20));
             this->context = new SEALContext(*parms);
@@ -55,16 +59,21 @@ class Calculator
             Ciphertext c1,c2;
             this->encryptor->encrypt(p1,c1);
             this->encryptor->encrypt(p2,c2);
-            //result stored in c1
-            this->evaluator->multiply_inplace(c1,c2);
+
+            for(int i =0; i < this->depth; i++)
+            {
+                //result stored in c1
+                this->evaluator->multiply_inplace(c1,c2);
+            }
+            
             this->decryptor->decrypt(c1,presult);
             vector<uint64_t> result;
             this->encoder->decode(presult, result);
-            if(result[0]!=(a*b))
+            if(result[0]!=(a*pow(b,this->depth)))
             {
                 std::ostringstream oss;
                 oss.precision(10);
-                oss << "Decrpytion values do not match: " << result[0] << " vs " << a*b;
+                oss << "Decrpytion values do not match: " << result[0] << " vs " << a*pow(b,this->depth);
                 throw std::runtime_error(oss.str());
             }
             return result[0];
@@ -79,15 +88,19 @@ class Calculator
             this->encoder->encode(bv,p2);
             Ciphertext c1;
             this->encryptor->encrypt(p1,c1);
-            //result stored in c1
-            this->evaluator->multiply_plain_inplace(c1,p2);
+
+            for(int i =0; i < this->depth; i++)
+            {
+                //result stored in c1
+                this->evaluator->multiply_plain_inplace(c1,p2);
+            }
             this->decryptor->decrypt(c1,presult);
             vector<uint64_t> result;
             this->encoder->decode(presult, result);
-            if(result[0]!=(a*b))
+            if(result[0]!=(a*pow(b,this->depth)))
             {
                 std::ostringstream oss;
-                oss << "Decrpytion values do not match: " << result[0] << " vs " << a*b;
+                oss << "Decrpytion values do not match: " << result[0] << " vs " << a*pow(b,this->depth);
                 throw std::runtime_error(oss.str());
             }
             return result[0];
@@ -103,15 +116,19 @@ class Calculator
             Ciphertext c1,c2;
             this->encryptor->encrypt(p1,c1);
             this->encryptor->encrypt(p2,c2);
-            //result stored in c1
-            this->evaluator->add_inplace(c1,c2);
+
+            for(int i =0; i < this->depth; i++)
+            {
+                //result stored in c1
+                this->evaluator->add_inplace(c1,c2);
+            }
             this->decryptor->decrypt(c1,presult);
             vector<uint64_t> result;
             this->encoder->decode(presult, result);
-            if(result[0]!=(a+b))
+            if(result[0]!=(a+b*this->depth))
             {
                 std::ostringstream oss;
-                oss << "Decrpytion values do not match: " << result[0] << " vs " << a+b;
+                oss << "Decrpytion values do not match: " << result[0] << " vs " << a+b*this->depth;
                 throw std::runtime_error(oss.str());
             }
             return result[0];
@@ -127,15 +144,18 @@ class Calculator
             this->encoder->encode(bv,p2);
             Ciphertext c1;
             this->encryptor->encrypt(p1,c1);
-            //result stored in c1
-            this->evaluator->add_plain_inplace(c1,p2);
+            for(int i =0; i < this->depth; i++)
+            {
+                //result stored in c1
+                this->evaluator->add_plain_inplace(c1,p2);
+            }
             this->decryptor->decrypt(c1,presult);
             vector<uint64_t> result;
             this->encoder->decode(presult, result);
-            if(result[0]!=(a+b))
+            if(result[0]!=(a+b*this->depth))
             {
                 std::ostringstream oss;
-                oss << "Decrpytion values do not match: " << result[0] << " vs " << a+b;
+                oss << "Decrpytion values do not match: " << result[0] << " vs " << a+b*this->depth;
                 throw std::runtime_error(oss.str());
             }
             return result[0];

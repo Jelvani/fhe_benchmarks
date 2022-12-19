@@ -3,8 +3,8 @@
 using namespace std::chrono;
 
 #define ITER 100
-#define POLY_MOD_DEGREE 8192
-
+#define POLY_MOD_DEGREE 8192*2
+#define DEPTH 5
 int get_rand()
 {
     return (10000) * ( (int)rand() / (int)RAND_MAX ) + 1;
@@ -13,7 +13,7 @@ int get_rand()
 int main()
 {
 
-    Calculator c(POLY_MOD_DEGREE);
+    Calculator c(POLY_MOD_DEGREE,DEPTH);
     auto start = high_resolution_clock::now();
 
     for(int i  =0; i < ITER; i++)
