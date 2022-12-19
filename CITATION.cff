@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Jelvani
+    given-names: Alborz
+    orcid: https://orcid.org/0000-0003-0607-5524
+title: "Benchmarking Homomorphic Encryption Libraries [CS671]"
+version: 1.0
