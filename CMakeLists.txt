@@ -16,12 +16,16 @@ cmake_minimum_required (VERSION 3.5.1)
 ### After you run "make install" in your build directory, you can build your custom application.
 ### If you need your application to be linked statically, then run "cmake .. -DBUILD_STATIC=ON"
 
-project(demo CXX)
+project(fhe_benchmarks CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS -gdwarf-3)
 option( BUILD_STATIC "Set to ON to include static versions of the library" OFF)
 
 find_package(OpenFHE)
+find_package(SEAL 4.0.0 EXACT REQUIRED)
+
+add_executable(seal_calculator src/seal/main.cpp src/seal/calculator.cpp)
+target_link_libraries(seal_calculator SEAL::seal ${CMAKE_DL_LIBS})
 
 set( CMAKE_CXX_FLAGS ${OpenFHE_CXX_FLAGS} )
 
@@ -46,4 +50,5 @@ endif()
 ### add_executable( EXECUTABLE-NAME SOURCES )
 ###
 ### EXAMPLE:
-add_executable( calculator calculator.cpp )
+add_executable(ofhe_calculator src/openfhe/calculator.cpp )
+
