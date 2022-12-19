@@ -39,11 +39,7 @@
 *.i*86
 *.x86_64
 *.hex
-src/seal/build/*
-src/openfhe/build/*
-!src/seal/build/.gitkeep
-!src/openfhe/.gitkeep
-
+build/
 # Debug files
 *.dSYM/
 *.su
