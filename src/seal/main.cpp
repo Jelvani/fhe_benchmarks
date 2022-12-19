@@ -20,7 +20,7 @@ int main()
     {
         int a = get_rand();
         int b = get_rand();
-        int ans = c.multiply_cipher(a,b);
+        c.multiply_cipher(a,b);
     }
 
     auto stop = high_resolution_clock::now();
@@ -33,7 +33,7 @@ int main()
     {
         int a = get_rand();
         int b = get_rand();
-        int ans = c.add_cipher(a,b);
+        c.add_cipher(a,b);
     }
 
     stop = high_resolution_clock::now();
@@ -45,7 +45,7 @@ int main()
     {
         int a = get_rand();
         int b = get_rand();
-        int ans = c.multiply(a,b);
+        c.multiply(a,b);
     }
 
     stop = high_resolution_clock::now();
@@ -57,7 +57,7 @@ int main()
     {
         int a = get_rand();
         int b = get_rand();
-        int ans = c.add(a,b);
+        c.add(a,b);
     }
 
     stop = high_resolution_clock::now();

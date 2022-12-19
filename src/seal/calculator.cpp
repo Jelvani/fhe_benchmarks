@@ -60,7 +60,7 @@ class Calculator
             this->encryptor->encrypt(p1,c1);
             this->encryptor->encrypt(p2,c2);
 
-            for(int i =0; i < this->depth; i++)
+            for(size_t i =0; i < this->depth; i++)
             {
                 //result stored in c1
                 this->evaluator->multiply_inplace(c1,c2);
@@ -89,7 +89,7 @@ class Calculator
             Ciphertext c1;
             this->encryptor->encrypt(p1,c1);
 
-            for(int i =0; i < this->depth; i++)
+            for(size_t i =0; i < this->depth; i++)
             {
                 //result stored in c1
                 this->evaluator->multiply_plain_inplace(c1,p2);
@@ -117,7 +117,7 @@ class Calculator
             this->encryptor->encrypt(p1,c1);
             this->encryptor->encrypt(p2,c2);
 
-            for(int i =0; i < this->depth; i++)
+            for(size_t i =0; i < this->depth; i++)
             {
                 //result stored in c1
                 this->evaluator->add_inplace(c1,c2);
@@ -144,7 +144,7 @@ class Calculator
             this->encoder->encode(bv,p2);
             Ciphertext c1;
             this->encryptor->encrypt(p1,c1);
-            for(int i =0; i < this->depth; i++)
+            for(size_t i =0; i < this->depth; i++)
             {
                 //result stored in c1
                 this->evaluator->add_plain_inplace(c1,p2);
