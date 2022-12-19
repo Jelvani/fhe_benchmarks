@@ -5,8 +5,8 @@
 using namespace std::chrono;
 
 #define ITER 100
-#define DEPTH 1
-#define PMD 1032193
+#define DEPTH 4
+#define PMD 536903681 //1032193
 using namespace lbcrypto;
 using namespace std;
 
@@ -15,13 +15,15 @@ class Calculator
     public:
         CCParams<CryptoContextBFVRNS>* parms = NULL;
         size_t pmd;
+        int depth;
         CryptoContext<DCRTPoly> context;
         KeyPair<DCRTPoly> keyPair;
 
-        Calculator(size_t pmd, int depth)
+        Calculator(size_t pmd, size_t depth)
         {
             this->parms = new CCParams<CryptoContextBFVRNS>();
             this->pmd = pmd;
+            this->depth = depth;
             this->parms->SetPlaintextModulus(this->pmd);
             this->parms->SetMultiplicativeDepth(depth);
             this->context = GenCryptoContext(*(this->parms));
@@ -45,15 +47,20 @@ class Calculator
 
             auto c1 = this->context->Encrypt(this->keyPair.publicKey,p1);
             auto c2 = this->context->Encrypt(this->keyPair.publicKey,p2);
-            auto res = this->context->EvalMult(c1,c2);
+            auto res = c1;
+            for(int i =0; i < this->depth; i++)
+            {
+                res = this->context->EvalMult(c1,c2);
+                c1 = res;
+            }
             this->context->Decrypt(this->keyPair.secretKey,res,&presult);
             int result =  presult->GetPackedValue()[0];
 
 
-            if(result != a*b)
+            if(result != a*pow(b,this->depth))
             {
                 std::ostringstream oss;
-                oss << "Decrpytion values do not match: " << result << " vs " << a*b;
+                oss << "Decrpytion values do not match: " << result << " vs " << a*pow(b,this->depth);
                 throw std::runtime_error(oss.str());
             }
             return result;
@@ -72,15 +79,20 @@ class Calculator
 
 
             auto c1 = this->context->Encrypt(this->keyPair.publicKey,p1);
-            auto res = this->context->EvalMult(c1,p2);
+            auto res = c1;
+            for(int i =0; i < this->depth; i++)
+            {
+                res = this->context->EvalMult(c1,p2);
+                c1 = res;
+            }
             this->context->Decrypt(this->keyPair.secretKey,res,&presult);
             int result =  presult->GetPackedValue()[0];
 
 
-            if(result != a*b)
+            if(result != a*pow(b,this->depth))
             {
                 std::ostringstream oss;
-                oss << "Decrpytion values do not match: " << result << " vs " << a*b;
+                oss << "Decrpytion values do not match: " << result << " vs " << a*pow(b,this->depth);
                 throw std::runtime_error(oss.str());
             }
             return result;
@@ -100,15 +112,20 @@ class Calculator
 
             auto c1 = this->context->Encrypt(this->keyPair.publicKey,p1);
             auto c2 = this->context->Encrypt(this->keyPair.publicKey,p2);
-            auto res = this->context->EvalAdd(c1,c2);
+            auto res = c1;
+            for(int i =0; i < this->depth; i++)
+            {
+                res = this->context->EvalAdd(c1,c2);
+                res = c1;
+            }
             this->context->Decrypt(this->keyPair.secretKey,res,&presult);
             int result =  presult->GetPackedValue()[0];
 
 
-            if(result != a+b)
+            if(result != a+b*this->depth)
             {
                 std::ostringstream oss;
-                oss << "Decrpytion values do not match: " << result << " vs " << a+b;
+                oss << "Decrpytion values do not match: " << result << " vs " << a+b*this->depth;
                 throw std::runtime_error(oss.str());
             }
             return result;
@@ -128,15 +145,20 @@ class Calculator
 
             auto c1 = this->context->Encrypt(this->keyPair.publicKey,p1);
             auto c2 = this->context->Encrypt(this->keyPair.publicKey,p2);
-            auto res = this->context->EvalAdd(c1,p2);
+            auto res = c1;
+            for(int i =0; i < this->depth; i++)
+            {
+                res = this->context->EvalAdd(c1,p2);
+                res = c1;
+            }
             this->context->Decrypt(this->keyPair.secretKey,res,&presult);
             int result =  presult->GetPackedValue()[0];
 
 
-            if(result != a+b)
+            if(result != a+b*this->depth)
             {
                 std::ostringstream oss;
-                oss << "Decrpytion values do not match: " << result << " vs " << a+b;
+                oss << "Decrpytion values do not match: " << result << " vs " << a+b*this->depth;
                 throw std::runtime_error(oss.str());
             }
             return result;
